@@ -7,7 +7,7 @@ const config = {
 	user: 'postgres',
 	password: '123456',
 	host: 'localhost',
-	database: 'example_data',
+	database: 'mywallet',
 };
 
 const dbConnection = new Pool(config);
