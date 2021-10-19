@@ -39,7 +39,7 @@ async function postLogin(request, response) {
 			return;
 		}
 
-		response.sendStatus(200);
+		response.status(200).send({ userId: user.rows[0].id });
 	} catch (error) {
 		internalErrorResponse(response, error);
 	}
