@@ -1,13 +1,24 @@
-import { searchTransactions } from '../data/transaction.js';
-
 import { internalErrorResponse } from '../helpers/genericHelpers.js';
+
+import transactionSchema from '../validation/transactionValidation.js';
+
+import { searchTransactionsByUserId } from '../data/transactionTable.js';
 
 const route = '/transactions';
 
 async function getTransaction(request, response) {
+	const { userId } = request.body;
+
+	const validationError = transactionSchema.validate({ userId }).error;
+
+	if (validationError) {
+		response.status(400).send(validationError.message);
+		return;
+	}
+
 	try {
-		const successfulSearch = await searchTransactions();
-		response.status(200).send('this is an example route');
+		const userTransactions = await searchTransactionsByUserId(userId);
+		response.status(200).send(userTransactions.rows);
 	} catch (error) {
 		internalErrorResponse(response, error);
 	}
@@ -15,7 +26,7 @@ async function getTransaction(request, response) {
 
 async function postTransaction(request, response) {
 	try {
-		const successfulSearch = await searchTransactions();
+		const successfulSearch = await searchTransactionsByUserId();
 		response.status(200).send('this is an example route');
 	} catch (error) {
 		internalErrorResponse(response, error);

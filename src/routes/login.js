@@ -34,7 +34,7 @@ async function postLogin(request, response) {
 
 		if (!correctPassword) {
 			response
-				.status(400)
+				.status(401)
 				.send('The password you’ve entered is incorrect');
 			return;
 		}

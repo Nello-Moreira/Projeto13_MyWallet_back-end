@@ -8,8 +8,8 @@ CREATE TABLE "users" (
 
 CREATE TABLE "transactions" (
   "id" SERIAL PRIMARY KEY,
-  "date" TIMESTAMP WITH TIME ZONE,
-  "value" NUMERIC(19,4),
+  "date" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  "value" NUMERIC(19,4) DEFAULT 0,
   "description" TEXT NOT NULL,
-  "user_id" TEXT
+  "user_id" TEXT NOT NULL
 );
