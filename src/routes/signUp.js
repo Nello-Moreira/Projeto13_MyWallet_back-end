@@ -1,5 +1,5 @@
 import { internalErrorResponse } from '../helpers/genericHelpers.js';
-import { hashPassword } from '../validation/passwordEncrypt.js';
+import { hashPassword } from '../helpers/passwordEncrypt.js';
 
 import signUpSchema from '../validation/signUpValidation.js';
 
