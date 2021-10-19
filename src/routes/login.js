@@ -3,14 +3,14 @@ import { comparePassword } from '../helpers/passwordEncrypt.js';
 
 import { searchUserByParam } from '../data/usersTable.js';
 
-import loginValidation from '../validation/loginValidation.js';
+import { loginSchema } from '../validation/validations.js';
 
 const route = '/login';
 
 async function postLogin(request, response) {
 	const { email, password } = request.body;
 
-	const validationError = loginValidation.validate({ email, password }).error;
+	const validationError = loginSchema.validate({ email, password }).error;
 
 	if (validationError) {
 		response.status(400).send(validationError.message);

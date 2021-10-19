@@ -1,6 +1,6 @@
 import { internalErrorResponse } from '../helpers/genericHelpers.js';
 
-import transactionSchema from '../validation/transactionValidation.js';
+import { idSchema, transactionSchema } from '../validation/validations.js';
 
 import { searchTransactionsByUserId } from '../data/transactionTable.js';
 
@@ -9,7 +9,7 @@ const route = '/transactions';
 async function getTransaction(request, response) {
 	const { userId } = request.body;
 
-	const validationError = transactionSchema.validate({ userId }).error;
+	const validationError = idSchema.validate({ id: userId }).error;
 
 	if (validationError) {
 		response.status(400).send(validationError.message);
@@ -25,6 +25,19 @@ async function getTransaction(request, response) {
 }
 
 async function postTransaction(request, response) {
+	const { userId, value, description } = request.body;
+
+	const validationError = transactionSchema.validate({
+		userId,
+		value,
+		description,
+	}).error;
+
+	if (validationError) {
+		response.status(400).send(validationError.message);
+		return;
+	}
+
 	try {
 		const successfulSearch = await searchTransactionsByUserId();
 		response.status(200).send('this is an example route');

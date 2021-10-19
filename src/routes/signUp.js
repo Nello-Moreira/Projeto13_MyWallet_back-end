@@ -1,7 +1,7 @@
 import { internalErrorResponse } from '../helpers/genericHelpers.js';
 import { hashPassword } from '../helpers/passwordEncrypt.js';
 
-import signUpSchema from '../validation/signUpValidation.js';
+import { signUpSchema } from '../validation/validations.js';
 
 import { searchUserByParam, insertUser } from '../data/usersTable.js';
 

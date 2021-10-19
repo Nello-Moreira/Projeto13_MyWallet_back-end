@@ -9,4 +9,15 @@ const searchTransactionsByUserId = userId =>
 		[userId]
 	);
 
-export { searchTransactionsByUserId };
+const insertTransaction = ({ userId, value, description }) =>
+	dbConnection.query(
+		`
+		INSERT INTO transactions 
+		(user_id, value, description) 
+		VALUES
+		($1, $2, $3)
+		`,
+		[userId, value, description]
+	);
+
+export { searchTransactionsByUserId, insertTransaction };
