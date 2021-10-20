@@ -16,6 +16,8 @@ const insertTransaction = ({ userId, value, description }) =>
 		(user_id, value, description) 
 		VALUES
 		($1, $2, $3)
+		RETURNING
+		date, user_id, value, description
 		`,
 		[userId, value, description]
 	);
