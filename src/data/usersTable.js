@@ -1,12 +1,12 @@
 import dbConnection from './connection.js';
 
-const insertUser = ({ name, email, password }) =>
+const insertUser = ({ user_id, name, email, password }) =>
 	dbConnection.query(
 		`
         INSERT INTO users 
-        (name, email, password)
-        VALUES ($1, $2, $3)`,
-		[name, email, password]
+        (user_id, name, email, password)
+        VALUES ($1, $2, $3, $4)`,
+		[user_id, name, email, password]
 	);
 
 const searchUserByParam = (param, value, offset = 0) =>

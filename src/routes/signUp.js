@@ -5,6 +5,8 @@ import { signUpSchema } from '../validation/validations.js';
 
 import { searchUserByParam, insertUser } from '../data/usersTable.js';
 
+import { v4 as uuid } from 'uuid';
+
 const route = '/sign-up';
 
 async function postNewUser(request, response) {
@@ -15,8 +17,7 @@ async function postNewUser(request, response) {
 	const validationError = signUpSchema.validate(newUser).error;
 
 	if (validationError) {
-		response.status(400).send(validationError.message);
-		return;
+		return response.status(400).send(validationError.message);
 	}
 
 	newUser.password = await hashPassword(password);
@@ -25,14 +26,18 @@ async function postNewUser(request, response) {
 		const user = await searchUserByParam('email', email);
 
 		if (user.rowCount > 0) {
-			response.status(409).send('This e-mail is already being used');
-			return;
+			return response
+				.status(409)
+				.send('This e-mail is already being used');
 		}
 
-		const successfulInsert = await insertUser(newUser);
-		response.sendStatus(201);
+		const successfulInsert = await insertUser({
+			...newUser,
+			user_id: uuid(),
+		});
+		return response.sendStatus(201);
 	} catch (error) {
-		internalErrorResponse(response, error);
+		return internalErrorResponse(response, error);
 	}
 }
 

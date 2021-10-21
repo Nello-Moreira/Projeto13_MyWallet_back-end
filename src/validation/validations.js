@@ -21,14 +21,21 @@ const signUpSchema = Joi.object({
 	password: Joi.string().min(1).required(),
 });
 
-const idSchema = Joi.object({
-	id: Joi.number().integer().min(1).required(),
+const userTokenSchema = Joi.object({
+	userId: Joi.string()
+		.pattern(/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/)
+		.required(),
+	token: Joi.string()
+		.pattern(/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/)
+		.required(),
 });
 
 const transactionSchema = Joi.object({
-	userId: Joi.number().integer().min(1).required(),
+	userId: Joi.string()
+		.pattern(/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/)
+		.required(),
 	value: Joi.number().required(),
 	description: Joi.string().min(1).required(),
 });
 
-export { loginSchema, signUpSchema, idSchema, transactionSchema };
+export { loginSchema, signUpSchema, userTokenSchema, transactionSchema };

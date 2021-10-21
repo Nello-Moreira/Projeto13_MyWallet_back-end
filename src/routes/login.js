@@ -2,8 +2,11 @@ import { internalErrorResponse } from '../helpers/genericHelpers.js';
 import { comparePassword } from '../helpers/passwordEncrypt.js';
 
 import { searchUserByParam } from '../data/usersTable.js';
+import { insertSession } from '../data/sessionsTable.js';
 
 import { loginSchema } from '../validation/validations.js';
+
+import { v4 as uuid } from 'uuid';
 
 const route = '/login';
 
@@ -13,18 +16,16 @@ async function postLogin(request, response) {
 	const validationError = loginSchema.validate({ email, password }).error;
 
 	if (validationError) {
-		response.status(400).send(validationError.message);
-		return;
+		return response.status(400).send(validationError.message);
 	}
 
 	try {
 		const user = await searchUserByParam('email', email);
 
 		if (user.rowCount === 0) {
-			response
+			return response
 				.status(404)
 				.send('There is no registered user for this email');
-			return;
 		}
 
 		const correctPassword = await comparePassword(
@@ -33,15 +34,23 @@ async function postLogin(request, response) {
 		);
 
 		if (!correctPassword) {
-			response
+			return response
 				.status(401)
 				.send('The password you’ve entered is incorrect');
-			return;
 		}
 
-		response.status(200).send({ userId: user.rows[0].id });
+		const result = await insertSession({
+			token: uuid(),
+			userId: user.rows[0].user_id,
+		});
+
+		const token = result.rows[0].token;
+
+		return response
+			.status(200)
+			.send({ userId: user.rows[0].user_id, token });
 	} catch (error) {
-		internalErrorResponse(response, error);
+		return internalErrorResponse(response, error);
 	}
 }
 

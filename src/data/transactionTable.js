@@ -1,11 +1,11 @@
 import dbConnection from './connection.js';
 
-const searchTransactionsByUserId = userId =>
+const searchTransactions = userId =>
 	dbConnection.query(
 		`
-		SELECT * 
+		SELECT transactions.date, transactions.value, transactions.description
 		FROM transactions
-		WHERE user_id = $1`,
+		WHERE transactions.user_id = $1;`,
 		[userId]
 	);
 
@@ -17,9 +17,9 @@ const insertTransaction = ({ userId, value, description }) =>
 		VALUES
 		($1, $2, $3)
 		RETURNING
-		date, user_id, value, description
+		date, value, description
 		`,
 		[userId, value, description]
 	);
 
-export { searchTransactionsByUserId, insertTransaction };
+export { searchTransactions, insertTransaction };
