@@ -4,6 +4,7 @@ import cors from 'cors';
 import signUp from './src/routes/signUp.js';
 import login from './src/routes/login.js';
 import transaction from './src/routes/transaction.js';
+import logout from './src/routes/logout.js';
 
 const port = 4000;
 const server = express();
@@ -16,6 +17,8 @@ server.post(login.route, login.postLogin);
 
 server.get(transaction.route, transaction.getTransaction);
 server.post(transaction.route, transaction.postTransaction);
+
+server.post(logout.route, logout.postLogout);
 
 server.listen(port, () => {
 	console.log(`Server listening on port ${port}`);

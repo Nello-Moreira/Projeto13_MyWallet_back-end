@@ -10,7 +10,7 @@ import {
 	insertTransaction,
 } from '../data/transactionTable.js';
 
-import { searchSession } from '../data/sessionsTable.js';
+import { isValidSession } from '../data/sessionsTable.js';
 
 const route = '/transactions';
 
@@ -30,7 +30,7 @@ async function getTransaction(request, response) {
 	}
 
 	try {
-		if (!(await validSession(user))) {
+		if (!(await isValidSession(user))) {
 			return response.sendStatus(401);
 		}
 
@@ -64,7 +64,7 @@ async function postTransaction(request, response) {
 	}
 
 	try {
-		if (!(await validSession(user))) {
+		if (!(await isValidSession(user))) {
 			return response.sendStatus(401);
 		}
 
@@ -73,15 +73,6 @@ async function postTransaction(request, response) {
 	} catch (error) {
 		return internalErrorResponse(response, error);
 	}
-}
-
-async function validSession({ userId, token }) {
-	const sessionData = await searchSession(userId);
-
-	if (sessionData.rowCount === 0 || sessionData.rows[0].token !== token) {
-		return false;
-	}
-	return true;
 }
 
 const transaction = {
