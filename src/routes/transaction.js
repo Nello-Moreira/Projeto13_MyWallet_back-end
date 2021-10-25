@@ -48,7 +48,7 @@ async function postTransaction(request, response) {
 	const transaction = { userId, value, description };
 
 	if (!authorization) {
-		return response.status(401);
+		return response.sendStatus(401);
 	}
 
 	const token = authorization.replace('Bearer ', '');
