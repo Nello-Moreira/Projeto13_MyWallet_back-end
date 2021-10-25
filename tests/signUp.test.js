@@ -10,7 +10,9 @@ const testAConflict = async () => {
 		password: 'testpassword',
 	};
 	const response = await supertest(server).post(signUp.route).send(body);
-	expect(response.status).toEqual(409);
+
+	expect(response.status).toBe(409);
+	expect(response.text).toBe('This e-mail is already being used');
 };
 
 const insertNewUser = async () => {
@@ -20,7 +22,7 @@ const insertNewUser = async () => {
 		password: 'testpassword',
 	};
 	const response = await supertest(server).post(signUp.route).send(body);
-	expect(response.status).toEqual(201);
+	expect(response.status).toBe(201);
 };
 
 const signUpTests = () => {
