@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 
-import signUp from './src/routes/signUp.js';
-import login from './src/routes/login.js';
-import transaction from './src/routes/transaction.js';
-import logout from './src/routes/logout.js';
+import signUp from './routes/signUp.js';
+import login from './routes/login.js';
+import transaction from './routes/transaction.js';
+import logout from './routes/logout.js';
 
 const server = express();
 server.use(cors());
