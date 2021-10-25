@@ -7,7 +7,7 @@ const config = {
 	user: 'mywallet_user_role',
 	password: '123456',
 	host: 'localhost',
-	database: 'mywallet',
+	database: 'mywallet_test',
 };
 
 const dbConnection = new Pool(config);
