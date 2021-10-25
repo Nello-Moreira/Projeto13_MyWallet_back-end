@@ -21,10 +21,13 @@ const signUpSchema = Joi.object({
 	password: Joi.string().min(1).required(),
 });
 
-const userTokenSchema = Joi.object({
+const userSchema = Joi.object({
 	userId: Joi.string()
 		.pattern(/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/)
 		.required(),
+});
+
+const tokenSchema = Joi.object({
 	token: Joi.string()
 		.pattern(/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/)
 		.required(),
@@ -38,4 +41,10 @@ const transactionSchema = Joi.object({
 	description: Joi.string().min(1).required(),
 });
 
-export { loginSchema, signUpSchema, userTokenSchema, transactionSchema };
+export {
+	loginSchema,
+	signUpSchema,
+	userSchema,
+	tokenSchema,
+	transactionSchema,
+};

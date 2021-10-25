@@ -2,7 +2,7 @@ import { internalErrorResponse } from '../helpers/genericHelpers.js';
 
 import { isValidSession, deleteSession } from '../data/sessionsTable.js';
 
-import { userTokenSchema } from '../validation/validations.js';
+import { userSchema, tokenSchema } from '../validation/validations.js';
 
 const route = '/logout';
 
@@ -14,21 +14,27 @@ async function postLogout(request, response) {
 		return response.sendStatus(401);
 	}
 
-	const user = { userId, token: authorization.replace('Bearer ', '') };
-	const validationError = userTokenSchema.validate(user).error;
+	const token = authorization.replace('Bearer ', '');
+	const userError = userSchema.validate({ userId }).error;
+	const tokenError = tokenSchema.validate({ token }).error;
 
-	if (validationError) {
-		return response.status(400).send(validationError.message);
+	if (userError) {
+		return response.status(400).send(userError.message);
+	}
+
+	if (tokenError) {
+		return response.status(400).send(tokenError.message);
 	}
 
 	try {
-		if (!(await isValidSession(user))) {
+		if (!(await isValidSession(token))) {
 			return response.sendStatus(401);
 		}
 
-		const successfulLogout = await deleteSession(user);
+		const successfulLogout = await deleteSession(userId, token);
 		return response.sendStatus(200);
 	} catch (error) {
+		console.log(error);
 		return internalErrorResponse(response, error);
 	}
 }

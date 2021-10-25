@@ -1,12 +1,12 @@
 import dbConnection from './connection.js';
 
-const searchSession = userId =>
+const searchSession = token =>
 	dbConnection.query(
 		`
         SELECT * FROM sessions 
-        WHERE user_id = $1 
+        WHERE token = $1 
         LIMIT 1`,
-		[userId]
+		[token]
 	);
 
 const insertSession = ({ token, userId }) =>
@@ -21,7 +21,7 @@ const insertSession = ({ token, userId }) =>
 		[userId, token]
 	);
 
-const deleteSession = ({ userId, token }) =>
+const deleteSession = (userId, token) =>
 	dbConnection.query(
 		`
         DELETE FROM sessions 
@@ -32,8 +32,8 @@ const deleteSession = ({ userId, token }) =>
 		[userId, token]
 	);
 
-const isValidSession = async ({ userId, token }) => {
-	const sessionData = await searchSession(userId);
+const isValidSession = async token => {
+	const sessionData = await searchSession(token);
 
 	if (sessionData.rowCount === 0 || sessionData.rows[0].token !== token) {
 		return false;
